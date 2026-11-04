@@ -6,8 +6,10 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
+    "test": "node scripts/verify-auth.js && node scripts/verify-campaigns.js",
     "test:db": "node scripts/test-db.js",
-    "test:auth": "node scripts/verify-auth.js"
+    "test:auth": "node scripts/verify-auth.js",
+    "test:campaigns": "node scripts/verify-campaigns.js"
   },
   "keywords": [
     "campaign-management",

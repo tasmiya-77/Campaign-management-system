@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const { pool, testConnection } = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
+const campaignRoutes = require('./routes/campaignRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,8 +18,9 @@ app.use(cookieParser());
 // Middleware: Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Authentication API routes
+// API routes
 app.use('/api/auth', authRoutes);
+app.use('/api/campaigns', campaignRoutes);
 
 // Health check endpoint
 app.get('/api/health', async (req, res) => {
