@@ -141,6 +141,25 @@ function initializeEventListeners() {
     });
   }
 
+  // Sidebar navigation switching
+  const navDashboard = document.getElementById('nav-dashboard');
+  const navCampaigns = document.getElementById('nav-campaigns');
+  if (navDashboard && navCampaigns) {
+    navDashboard.addEventListener('click', () => {
+      navDashboard.classList.add('active');
+      navCampaigns.classList.remove('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    navCampaigns.addEventListener('click', () => {
+      navCampaigns.classList.add('active');
+      navDashboard.classList.remove('active');
+      const tableSection = document.querySelector('.section-card');
+      if (tableSection) {
+        tableSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  }
+
   // Refresh button
   const refreshBtn = document.getElementById('btn-refresh');
   if (refreshBtn) {
@@ -552,3 +571,4 @@ function escapeHtml(str) {
 // Expose openEditModal and openDeleteModal to window for inline onclick handlers
 window.openEditModal = openEditModal;
 window.openDeleteModal = openDeleteModal;
+

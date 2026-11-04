@@ -10,7 +10,8 @@
     "test:db": "node scripts/test-db.js",
     "test:auth": "node scripts/verify-auth.js",
     "test:campaigns": "node scripts/verify-campaigns.js",
-    "test:frontend": "node scripts/verify-frontend.js"
+    "test:frontend": "node scripts/verify-frontend.js",
+    "audit": "node scripts/final-audit.js"
   },
   "keywords": [
     "campaign-management",
