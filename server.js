@@ -1,18 +1,24 @@
 const path = require('path');
 const express = require('express');
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
 const { pool, testConnection } = require('./config/db');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware: Body parsing
+// Middleware: Body and Cookie parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Middleware: Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Authentication API routes
+app.use('/api/auth', authRoutes);
 
 // Health check endpoint
 app.get('/api/health', async (req, res) => {
