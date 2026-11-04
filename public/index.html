@@ -3,94 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Campaign Management System</title>
+  <title>Login - Campaign Management System</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <header class="navbar">
-    <div class="brand">
-      <div class="brand-icon">⚡</div>
-      <span>Campaign Hub</span>
-    </div>
-    <div class="nav-links">
-      <span class="nav-tag">Phase 1: Foundation</span>
-      <span id="env-tag">Dev Environment</span>
-    </div>
-  </header>
-
-  <main class="main-container">
-    <section class="hero">
-      <h1>Campaign Management System</h1>
-      <p>Clean, modular, enterprise-grade backend foundation with MySQL pooling and Express.</p>
-    </section>
-
-    <div class="grid">
-      <!-- Server Status Card -->
-      <div class="card">
-        <div class="card-title">
-          <span>Server Status</span>
-          <span id="server-status-badge" class="status-badge checking">
-            <span class="status-dot"></span> Checking...
-          </span>
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="brand-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+          <span>Campaign Hub</span>
         </div>
-        <div class="metric-list">
-          <div class="metric-row">
-            <span class="metric-label">Runtime Engine</span>
-            <span class="metric-value">Node.js + Express</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Server Uptime</span>
-            <span id="uptime-val" class="metric-value">-</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Last Checked</span>
-            <span id="timestamp-val" class="metric-value">-</span>
-          </div>
-        </div>
-        <div class="actions">
-          <button id="btn-refresh" class="btn">Refresh Health</button>
-          <a href="/api/health" target="_blank" class="btn btn-secondary">Open /api/health</a>
-        </div>
+        <h1 class="auth-title">Welcome back</h1>
+        <p class="auth-subtitle">Sign in to access your campaign dashboard</p>
       </div>
 
-      <!-- Database Status Card -->
-      <div class="card">
-        <div class="card-title">
-          <span>MySQL Database</span>
-          <span id="db-status-badge" class="status-badge checking">
-            <span class="status-dot"></span> Checking...
-          </span>
+      <!-- Server & Validation Error Banner -->
+      <div id="error-banner" class="error-banner"></div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label for="email" class="form-label">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-input"
+            placeholder="name@company.com"
+            required
+            autocomplete="email"
+          >
         </div>
-        <div class="metric-list">
-          <div class="metric-row">
-            <span class="metric-label">Target Driver</span>
-            <span class="metric-value">mysql2 / promise pool</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Default Target</span>
-            <span class="metric-value">localhost:3306 (XAMPP)</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Database Name</span>
-            <span class="metric-value">campaign_management</span>
-          </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-input"
+            placeholder="Enter your password"
+            required
+            autocomplete="current-password"
+          >
         </div>
+
+        <button type="submit" id="btn-submit" class="btn btn-primary btn-block" style="margin-top: 1.5rem;">
+          Sign In
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        <span>Don't have an account? </span>
+        <a href="/register.html" style="font-weight: 600;">Create one</a>
       </div>
     </div>
+  </div>
 
-    <!-- Live API Response -->
-    <div class="card">
-      <div class="card-title">
-        <span>Raw API Response (/api/health)</span>
-      </div>
-      <pre id="raw-response" class="code-block">Loading live response...</pre>
-    </div>
-  </main>
-
-  <footer class="footer">
-    <p>Campaign Management System &bull; Phase 1 Foundation &bull; Vanilla Stack</p>
-  </footer>
-
-  <script src="/js/app.js"></script>
+  <div id="toast-container" class="toast-container"></div>
+  <script src="/js/auth.js"></script>
 </body>
 </html>

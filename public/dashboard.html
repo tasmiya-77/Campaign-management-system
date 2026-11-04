@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Campaign Management System</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand-icon">⚡</div>
+        <span class="sidebar-brand-text">CampaignHub</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a class="nav-item active" id="nav-dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          <span>Dashboard</span>
+        </a>
+        <a class="nav-item" id="nav-campaigns">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+            <line x1="4" y1="22" x2="4" y2="15"></line>
+          </svg>
+          <span>Campaigns</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="user-avatar" id="user-avatar">U</div>
+          <div class="user-info">
+            <div class="user-name" id="user-name">Loading...</div>
+            <div class="user-email" id="user-email">...</div>
+          </div>
+        </div>
+        <button id="btn-logout" class="btn-logout">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-wrapper">
+      <!-- Top Navbar -->
+      <header class="top-navbar">
+        <div class="page-title-group">
+          <h1>Campaign Dashboard</h1>
+          <p id="user-greeting">Welcome back!</p>
+        </div>
+        <div>
+          <button id="btn-open-create" class="btn btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>New Campaign</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Content Container -->
+      <main class="content-container">
+        <!-- Metric Statistics Cards -->
+        <section class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-info">
+              <div class="stat-label">Total Campaigns</div>
+              <div class="stat-value" id="stat-total">0</div>
+            </div>
+            <div class="stat-icon blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+              </svg>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-info">
+              <div class="stat-label">Active</div>
+              <div class="stat-value" id="stat-active" style="color: var(--status-active);">0</div>
+            </div>
+            <div class="stat-icon green">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+              </svg>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-info">
+              <div class="stat-label">Paused</div>
+              <div class="stat-value" id="stat-paused" style="color: var(--status-paused);">0</div>
+            </div>
+            <div class="stat-icon amber">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="10" y1="15" x2="10" y2="9"></line>
+                <line x1="14" y1="15" x2="14" y2="9"></line>
+              </svg>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-info">
+              <div class="stat-label">Completed</div>
+              <div class="stat-value" id="stat-completed" style="color: var(--status-completed);">0</div>
+            </div>
+            <div class="stat-icon slate">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        <!-- Campaign Management Section -->
+        <section class="section-card">
+          <!-- Toolbar (Search & Filter) -->
+          <div class="toolbar">
+            <div class="toolbar-filters">
+              <div class="search-box">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input
+                  type="text"
+                  id="search-input"
+                  class="search-input"
+                  placeholder="Search by campaign name..."
+                >
+              </div>
+
+              <select id="filter-status" class="filter-select">
+                <option value="">All Statuses</option>
+                <option value="Active">Active</option>
+                <option value="Paused">Paused</option>
+                <option value="Completed">Completed</option>
+              </select>
+            </div>
+
+            <button id="btn-refresh" class="btn btn-secondary btn-sm">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <polyline points="1 20 1 14 7 14"></polyline>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+              </svg>
+              <span>Refresh</span>
+            </button>
+          </div>
+
+          <!-- Table Content -->
+          <div class="table-responsive">
+            <table class="campaign-table" id="campaign-table">
+              <thead>
+                <tr>
+                  <th style="width: 45%;">Campaign Name</th>
+                  <th style="width: 20%;">Status</th>
+                  <th style="width: 20%;">Date Created</th>
+                  <th style="width: 15%; text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="campaign-tbody">
+                <!-- Dynamically populated rows -->
+              </tbody>
+            </table>
+
+            <!-- Loading Spinner State -->
+            <div id="loading-state" class="state-container">
+              <div class="spinner"></div>
+              <p style="color: var(--text-muted); font-size: 0.9rem;">Loading your campaigns...</p>
+            </div>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="state-container" style="display: none;">
+              <div class="empty-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+                  <line x1="4" y1="22" x2="4" y2="15"></line>
+                </svg>
+              </div>
+              <h3 class="empty-title">No campaigns found</h3>
+              <p class="empty-subtitle">Get started by creating your first marketing campaign to track performance.</p>
+              <button id="btn-empty-create" class="btn btn-primary">
+                + Create Campaign
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal: Create Campaign -->
+  <div id="modal-create" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title">Create Campaign</h2>
+        <button class="modal-close" data-close="modal-create">&times;</button>
+      </div>
+      <form id="form-create">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="create-name" class="form-label">Campaign Name</label>
+            <input
+              type="text"
+              id="create-name"
+              class="form-input"
+              placeholder="e.g. Q4 Black Friday Promo"
+              required
+              maxlength="150"
+            >
+          </div>
+          <div class="form-group">
+            <label for="create-status" class="form-label">Initial Status</label>
+            <select id="create-status" class="form-select">
+              <option value="Active" selected>Active</option>
+              <option value="Paused">Paused</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close="modal-create">Cancel</button>
+          <button type="submit" id="btn-submit-create" class="btn btn-primary">Create Campaign</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Edit Campaign -->
+  <div id="modal-edit" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title">Edit Campaign</h2>
+        <button class="modal-close" data-close="modal-edit">&times;</button>
+      </div>
+      <form id="form-edit">
+        <input type="hidden" id="edit-id">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="edit-name" class="form-label">Campaign Name</label>
+            <input
+              type="text"
+              id="edit-name"
+              class="form-input"
+              required
+              maxlength="150"
+            >
+          </div>
+          <div class="form-group">
+            <label for="edit-status" class="form-label">Campaign Status</label>
+            <select id="edit-status" class="form-select">
+              <option value="Active">Active</option>
+              <option value="Paused">Paused</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close="modal-edit">Cancel</button>
+          <button type="submit" id="btn-submit-edit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Delete Confirmation -->
+  <div id="modal-delete" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title" style="color: var(--danger);">Delete Campaign</h2>
+        <button class="modal-close" data-close="modal-delete">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Are you sure you want to delete <strong id="delete-campaign-name"></strong>?
+        </p>
+        <p style="font-size: 0.825rem; color: var(--text-muted); margin-top: 0.5rem;">
+          This action is permanent and cannot be undone.
+        </p>
+        <input type="hidden" id="delete-id">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close="modal-delete">Cancel</button>
+        <button type="button" id="btn-confirm-delete" class="btn btn-danger">Yes, Delete Campaign</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>
