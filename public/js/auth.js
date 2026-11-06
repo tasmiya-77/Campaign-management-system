@@ -1,10 +1,10 @@
 /**
- * Campaign Management System - Client Auth Module
- * Handles Login, Registration, and Session Verification
+ * CampaignHub — Client Auth Module
+ * Handles Login, Registration, Session Verification, Inline Validation
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Check if session is already active; if so, redirect directly to dashboard
+  // Check for active session; redirect to dashboard if authenticated
   checkExistingSession();
 
   const loginForm = document.getElementById('login-form');
@@ -16,6 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if (registerForm) {
     registerForm.addEventListener('submit', handleRegister);
   }
+
+  // Password visibility toggles
+  initPasswordToggles();
+
+  // Inline validation on blur
+  initInlineValidation();
 });
 
 /**
@@ -41,6 +47,7 @@ async function checkExistingSession() {
 async function handleLogin(e) {
   e.preventDefault();
   clearErrorBanner();
+  clearFieldErrors();
 
   const emailInput = document.getElementById('email');
   const passwordInput = document.getElementById('password');
@@ -49,19 +56,33 @@ async function handleLogin(e) {
   const email = emailInput.value.trim();
   const password = passwordInput.value;
 
-  if (!email || !password) {
-    showErrorBanner('Please enter both email and password.');
-    return;
+  // Client-side validation
+  let hasError = false;
+
+  if (!email) {
+    showFieldError('email-error', 'Email is required.');
+    emailInput.classList.add('error');
+    hasError = true;
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showFieldError('email-error', 'Please enter a valid email address.');
+    emailInput.classList.add('error');
+    hasError = true;
   }
+
+  if (!password) {
+    showFieldError('password-error', 'Password is required.');
+    passwordInput.classList.add('error');
+    hasError = true;
+  }
+
+  if (hasError) return;
 
   setButtonLoading(submitBtn, true, 'Signing in...');
 
   try {
     const response = await fetch('/api/auth/login', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       credentials: 'same-origin',
       body: JSON.stringify({ email, password }),
     });
@@ -94,6 +115,7 @@ async function handleLogin(e) {
 async function handleRegister(e) {
   e.preventDefault();
   clearErrorBanner();
+  clearFieldErrors();
 
   const nameInput = document.getElementById('name');
   const emailInput = document.getElementById('email');
@@ -107,24 +129,39 @@ async function handleRegister(e) {
   const confirmPassword = confirmPasswordInput.value;
 
   // Client-side validations
+  let hasError = false;
+
   if (name.length < 2) {
-    showErrorBanner('Full Name must be at least 2 characters long.');
-    return;
+    showFieldError('name-error', 'Name must be at least 2 characters.');
+    nameInput.classList.add('error');
+    hasError = true;
   }
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    showErrorBanner('Please enter a valid email address.');
-    return;
+  if (!email) {
+    showFieldError('email-error', 'Email is required.');
+    emailInput.classList.add('error');
+    hasError = true;
+  } else if (!emailRegex.test(email)) {
+    showFieldError('email-error', 'Please enter a valid email address.');
+    emailInput.classList.add('error');
+    hasError = true;
   }
 
   if (password.length < 6) {
-    showErrorBanner('Password must be at least 6 characters long.');
-    return;
+    showFieldError('password-error', 'Password must be at least 6 characters.');
+    passwordInput.classList.add('error');
+    hasError = true;
   }
 
   if (password !== confirmPassword) {
-    showErrorBanner('Passwords do not match. Please re-enter.');
+    showFieldError('confirm-error', 'Passwords do not match.');
+    confirmPasswordInput.classList.add('error');
+    hasError = true;
+  }
+
+  if (hasError) {
+    showErrorBanner('Please fix the errors above to continue.');
     return;
   }
 
@@ -133,9 +170,7 @@ async function handleRegister(e) {
   try {
     const response = await fetch('/api/auth/register', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       credentials: 'same-origin',
       body: JSON.stringify({ name, email, password }),
     });
@@ -162,9 +197,83 @@ async function handleRegister(e) {
   }
 }
 
-/**
- * UI Helper: Displays error message in the form's error banner.
- */
+// ─── Password Toggle ─────────────────────────
+function initPasswordToggles() {
+  const togglePassword = document.getElementById('toggle-password');
+  if (togglePassword) {
+    togglePassword.addEventListener('click', () => {
+      togglePasswordField('password', togglePassword);
+    });
+  }
+
+  const toggleConfirm = document.getElementById('toggle-confirm-password');
+  if (toggleConfirm) {
+    toggleConfirm.addEventListener('click', () => {
+      togglePasswordField('confirmPassword', toggleConfirm);
+    });
+  }
+}
+
+function togglePasswordField(inputId, toggleBtn) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+
+  const eyeIcon = toggleBtn.querySelector('.eye-icon');
+  const eyeOffIcon = toggleBtn.querySelector('.eye-off-icon');
+
+  if (input.type === 'password') {
+    input.type = 'text';
+    if (eyeIcon) eyeIcon.style.display = 'none';
+    if (eyeOffIcon) eyeOffIcon.style.display = 'block';
+  } else {
+    input.type = 'password';
+    if (eyeIcon) eyeIcon.style.display = 'block';
+    if (eyeOffIcon) eyeOffIcon.style.display = 'none';
+  }
+}
+
+// ─── Inline Validation ───────────────────────
+function initInlineValidation() {
+  const inputs = document.querySelectorAll('.form-input');
+  inputs.forEach((input) => {
+    input.addEventListener('blur', () => {
+      input.classList.remove('error');
+      const errorEl = input.closest('.form-group')?.querySelector('.form-error');
+      if (errorEl) {
+        errorEl.textContent = '';
+        errorEl.classList.remove('show');
+      }
+    });
+    input.addEventListener('input', () => {
+      input.classList.remove('error');
+      const errorEl = input.closest('.form-group')?.querySelector('.form-error');
+      if (errorEl) {
+        errorEl.textContent = '';
+        errorEl.classList.remove('show');
+      }
+    });
+  });
+}
+
+// ─── UI Helpers ──────────────────────────────
+function showFieldError(elementId, message) {
+  const el = document.getElementById(elementId);
+  if (el) {
+    el.textContent = message;
+    el.classList.add('show');
+  }
+}
+
+function clearFieldErrors() {
+  document.querySelectorAll('.form-error').forEach((el) => {
+    el.textContent = '';
+    el.classList.remove('show');
+  });
+  document.querySelectorAll('.form-input.error').forEach((el) => {
+    el.classList.remove('error');
+  });
+}
+
 function showErrorBanner(message) {
   const banner = document.getElementById('error-banner');
   if (banner) {
@@ -173,9 +282,6 @@ function showErrorBanner(message) {
   }
 }
 
-/**
- * UI Helper: Clears the form error banner.
- */
 function clearErrorBanner() {
   const banner = document.getElementById('error-banner');
   if (banner) {
@@ -184,18 +290,16 @@ function clearErrorBanner() {
   }
 }
 
-/**
- * UI Helper: Toggles loading state on form submit button.
- */
 function setButtonLoading(button, isLoading, text) {
   if (!button) return;
   button.disabled = isLoading;
-  button.textContent = text;
+  const btnText = button.querySelector('.btn-text');
+  const btnSpinner = button.querySelector('.btn-spinner');
+  if (btnText) btnText.textContent = text;
+  if (btnSpinner) btnSpinner.style.display = isLoading ? 'inline-block' : 'none';
 }
 
-/**
- * Toast Notification Helper.
- */
+// ─── Toast Notifications ─────────────────────
 function showToast(title, message, type = 'info') {
   let container = document.getElementById('toast-container');
   if (!container) {
@@ -210,10 +314,10 @@ function showToast(title, message, type = 'info') {
 
   const iconSvg =
     type === 'success'
-      ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--status-active)"><polyline points="20 6 9 17 4 12"></polyline></svg>`
+      ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--success)"><polyline points="20 6 9 17 4 12"></polyline></svg>`
       : type === 'error'
       ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--danger)"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>`
-      : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary)"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;
+      : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent)"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;
 
   toast.innerHTML = `
     <div class="toast-icon">${iconSvg}</div>
@@ -240,4 +344,3 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 }
-

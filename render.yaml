@@ -1,0 +1,40 @@
+# ==============================================================================
+# Render Blueprint Configuration for Campaign Management System
+# Documentation: https://render.com/docs/blueprint-spec
+# ==============================================================================
+
+services:
+  - type: web
+    name: campaign-management
+    env: node
+    plan: free
+    region: oregon # or frankfurt, ohio, singapore
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # TiDB Cloud Serverless Connection Parameters
+      - key: DB_HOST
+        sync: false # Set manually in Render Dashboard or prompt during blueprint setup
+      - key: DB_PORT
+        value: "4000"
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_NAME
+        value: "campaign_management"
+      - key: DB_SSL
+        value: "true"
+      - key: DB_CONNECTION_LIMIT
+        value: "10"
+      # Secure JWT authentication secret (Render generates an unguessable 256-bit random string)
+      - key: JWT_SECRET
+        generateValue: true
+      # Reverse proxy trust for HTTPS cookies and real IP logging
+      - key: TRUST_PROXY
+        value: "true"
+

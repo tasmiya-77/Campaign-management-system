@@ -3,29 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard - Campaign Management System</title>
+  <title>Campaign Dashboard — CampaignHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+  <!-- Mobile Sidebar Overlay -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
   <div class="app-layout">
-    <!-- Sidebar -->
-    <aside class="sidebar">
+    <!-- ─── Sidebar ─────────────────────────── -->
+    <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
-        <div class="sidebar-brand-icon">⚡</div>
-        <span class="sidebar-brand-text">CampaignHub</span>
+        <div class="sidebar-brand">
+          <div class="sidebar-brand-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+              <line x1="4" y1="22" x2="4" y2="15"></line>
+            </svg>
+          </div>
+          <span class="sidebar-brand-text">CampaignHub</span>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Collapse sidebar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="11 17 6 12 11 7"></polyline>
+            <polyline points="18 17 13 12 18 7"></polyline>
+          </svg>
+        </button>
       </div>
 
       <nav class="sidebar-nav">
-        <a class="nav-item active" id="nav-dashboard">
+        <div class="nav-section-label">Main</div>
+        <a class="nav-item active" id="nav-dashboard" role="button" tabindex="0">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="3" width="7" height="7"></rect>
-            <rect x="14" y="3" width="7" height="7"></rect>
-            <rect x="14" y="14" width="7" height="7"></rect>
-            <rect x="3" y="14" width="7" height="7"></rect>
+            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
           </svg>
           <span>Dashboard</span>
         </a>
-        <a class="nav-item" id="nav-campaigns">
+        <a class="nav-item" id="nav-campaigns" role="button" tabindex="0">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
             <line x1="4" y1="22" x2="4" y2="15"></line>
@@ -35,35 +55,57 @@
       </nav>
 
       <div class="sidebar-footer">
-        <div class="user-profile">
+        <div class="user-profile" id="user-profile-trigger" role="button" tabindex="0" aria-label="Account menu">
           <div class="user-avatar" id="user-avatar">U</div>
           <div class="user-info">
             <div class="user-name" id="user-name">Loading...</div>
             <div class="user-email" id="user-email">...</div>
           </div>
-        </div>
-        <button id="btn-logout" class="btn-logout">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-            <polyline points="16 17 21 12 16 7"></polyline>
-            <line x1="21" y1="12" x2="9" y2="12"></line>
+          <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
-          <span>Sign Out</span>
-        </button>
+        </div>
+
+        <!-- Account Dropdown Menu -->
+        <div class="account-dropdown" id="account-dropdown">
+          <div class="dropdown-header">
+            <div class="dd-name" id="dd-name">User</div>
+            <div class="dd-email" id="dd-email">user@email.com</div>
+          </div>
+          <button class="dropdown-item" id="btn-profile-view">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span>My Profile</span>
+          </button>
+          <button class="dropdown-item danger" id="btn-logout">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            <span>Sign Out</span>
+          </button>
+        </div>
       </div>
     </aside>
 
-    <!-- Main Content -->
+    <!-- ─── Main Content ────────────────────── -->
     <div class="main-wrapper">
       <!-- Top Navbar -->
       <header class="top-navbar">
-        <div class="page-title-group">
-          <h1>Campaign Dashboard</h1>
-          <p id="user-greeting">Welcome back!</p>
+        <div class="topbar-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open menu">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+          <nav class="breadcrumbs" aria-label="Breadcrumb">
+            <span>CampaignHub</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <span class="breadcrumb-current" id="breadcrumb-current">Dashboard</span>
+          </nav>
         </div>
-        <div>
-          <button id="btn-open-create" class="btn btn-primary">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <div class="topbar-right">
+          <div class="topbar-date" id="topbar-date"></div>
+          <button id="btn-open-create" class="btn btn-primary btn-sm">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="12" y1="5" x2="12" y2="19"></line>
               <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
@@ -72,9 +114,22 @@
         </div>
       </header>
 
-      <!-- Content Container -->
-      <main class="content-container">
-        <!-- Metric Statistics Cards -->
+      <!-- ═══ DASHBOARD VIEW ═══════════════── -->
+      <main class="content-container" id="view-dashboard">
+        <!-- Welcome Header -->
+        <div class="view-header">
+          <div class="view-header-text">
+            <h1>Campaign Dashboard</h1>
+            <p id="user-greeting">Welcome back!</p>
+            <div class="date-label" id="dashboard-date"></div>
+          </div>
+          <button class="btn btn-primary" id="btn-hero-create">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>Create Campaign</span>
+          </button>
+        </div>
+
+        <!-- KPI Cards -->
         <section class="stats-grid">
           <div class="stat-card">
             <div class="stat-info">
@@ -129,9 +184,95 @@
           </div>
         </section>
 
-        <!-- Campaign Management Section -->
+        <!-- Overview Row -->
+        <section class="overview-grid">
+          <!-- Status Distribution -->
+          <div class="section-card">
+            <div class="section-card-header">
+              <h3>Status Distribution</h3>
+            </div>
+            <div class="status-chart-container" id="status-chart">
+              <div class="status-bar-track" id="status-bar">
+                <div class="status-bar-segment active" id="bar-active" style="width:0%"></div>
+                <div class="status-bar-segment paused" id="bar-paused" style="width:0%"></div>
+                <div class="status-bar-segment completed" id="bar-completed" style="width:0%"></div>
+              </div>
+              <div class="status-legend">
+                <div class="status-legend-item">
+                  <span class="status-legend-dot active"></span>
+                  <span>Active <span class="status-legend-value" id="legend-active">0</span></span>
+                </div>
+                <div class="status-legend-item">
+                  <span class="status-legend-dot paused"></span>
+                  <span>Paused <span class="status-legend-value" id="legend-paused">0</span></span>
+                </div>
+                <div class="status-legend-item">
+                  <span class="status-legend-dot completed"></span>
+                  <span>Completed <span class="status-legend-value" id="legend-completed">0</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Campaigns -->
+          <div class="section-card">
+            <div class="section-card-header">
+              <h3>Recent Campaigns</h3>
+              <button class="btn btn-ghost btn-sm" id="btn-view-all">View All</button>
+            </div>
+            <div class="recent-list" id="recent-campaigns">
+              <div class="recent-empty">No campaigns yet. Create your first one!</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="quick-actions">
+          <div class="quick-action-card" id="qa-create">
+            <div class="quick-action-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </div>
+            <div class="quick-action-text">
+              <h4>New Campaign</h4>
+              <p>Create a new marketing campaign</p>
+            </div>
+          </div>
+          <div class="quick-action-card" id="qa-manage">
+            <div class="quick-action-icon" style="background: var(--secondary-light); color: var(--secondary);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+            </div>
+            <div class="quick-action-text">
+              <h4>Manage Campaigns</h4>
+              <p>View, edit, and organize campaigns</p>
+            </div>
+          </div>
+          <div class="quick-action-card" id="qa-refresh">
+            <div class="quick-action-icon" style="background: var(--success-light); color: var(--success);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            </div>
+            <div class="quick-action-text">
+              <h4>Refresh Data</h4>
+              <p>Sync the latest campaign data</p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- ═══ CAMPAIGNS VIEW ═══════════════── -->
+      <main class="content-container" id="view-campaigns" style="display: none;">
+        <div class="view-header">
+          <div class="view-header-text">
+            <h1>Campaigns</h1>
+            <p>Manage and organize all your marketing campaigns</p>
+          </div>
+          <button class="btn btn-primary" id="btn-campaigns-create">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>New Campaign</span>
+          </button>
+        </div>
+
         <section class="section-card">
-          <!-- Toolbar (Search & Filter) -->
+          <!-- Toolbar -->
           <div class="toolbar">
             <div class="toolbar-filters">
               <div class="search-box">
@@ -143,48 +284,55 @@
                   type="text"
                   id="search-input"
                   class="search-input"
-                  placeholder="Search by campaign name..."
+                  placeholder="Search campaigns..."
                 >
               </div>
-
               <select id="filter-status" class="filter-select">
                 <option value="">All Statuses</option>
                 <option value="Active">Active</option>
                 <option value="Paused">Paused</option>
                 <option value="Completed">Completed</option>
               </select>
+              <button class="sort-btn" id="btn-sort" title="Toggle sort order">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+                <span>Newest</span>
+              </button>
             </div>
-
-            <button id="btn-refresh" class="btn btn-secondary btn-sm">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="23 4 23 10 17 10"></polyline>
-                <polyline points="1 20 1 14 7 14"></polyline>
-                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-              </svg>
-              <span>Refresh</span>
-            </button>
+            <div class="toolbar-actions">
+              <button id="btn-refresh" class="btn btn-secondary btn-sm">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="23 4 23 10 17 10"></polyline>
+                  <polyline points="1 20 1 14 7 14"></polyline>
+                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                </svg>
+                <span>Refresh</span>
+              </button>
+            </div>
           </div>
 
-          <!-- Table Content -->
+          <!-- Table -->
           <div class="table-responsive">
             <table class="campaign-table" id="campaign-table">
               <thead>
                 <tr>
                   <th style="width: 45%;">Campaign Name</th>
-                  <th style="width: 20%;">Status</th>
-                  <th style="width: 20%;">Date Created</th>
+                  <th style="width: 18%;">Status</th>
+                  <th style="width: 22%;">Date Created</th>
                   <th style="width: 15%; text-align: right;">Actions</th>
                 </tr>
               </thead>
               <tbody id="campaign-tbody">
-                <!-- Dynamically populated rows -->
+                <!-- Dynamically populated -->
               </tbody>
             </table>
 
-            <!-- Loading Spinner State -->
-            <div id="loading-state" class="state-container">
-              <div class="spinner"></div>
-              <p style="color: var(--text-muted); font-size: 0.9rem;">Loading your campaigns...</p>
+            <!-- Loading Skeleton -->
+            <div id="loading-state" class="loading-skeleton-container">
+              <div class="skeleton-row"><span class="skeleton w-40"></span><span class="skeleton w-15"></span><span class="skeleton w-20"></span><span class="skeleton w-10"></span></div>
+              <div class="skeleton-row"><span class="skeleton w-40"></span><span class="skeleton w-15"></span><span class="skeleton w-20"></span><span class="skeleton w-10"></span></div>
+              <div class="skeleton-row"><span class="skeleton w-40"></span><span class="skeleton w-15"></span><span class="skeleton w-20"></span><span class="skeleton w-10"></span></div>
+              <div class="skeleton-row"><span class="skeleton w-40"></span><span class="skeleton w-15"></span><span class="skeleton w-20"></span><span class="skeleton w-10"></span></div>
+              <div class="skeleton-row"><span class="skeleton w-40"></span><span class="skeleton w-15"></span><span class="skeleton w-20"></span><span class="skeleton w-10"></span></div>
             </div>
 
             <!-- Empty State -->
@@ -196,23 +344,69 @@
                 </svg>
               </div>
               <h3 class="empty-title">No campaigns found</h3>
-              <p class="empty-subtitle">Get started by creating your first marketing campaign to track performance.</p>
+              <p class="empty-subtitle">Get started by creating your first marketing campaign to track and manage.</p>
               <button id="btn-empty-create" class="btn btn-primary">
-                + Create Campaign
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <span>Create Campaign</span>
               </button>
             </div>
+          </div>
+
+          <!-- Table Footer / Pagination -->
+          <div class="table-footer" id="table-footer" style="display: none;">
+            <span id="table-info">Showing 0 campaigns</span>
+            <div class="pagination" id="pagination"></div>
           </div>
         </section>
       </main>
     </div>
   </div>
 
-  <!-- Modal: Create Campaign -->
+  <!-- ─── Campaign Detail Drawer ────────────── -->
+  <div class="detail-drawer-overlay" id="drawer-overlay"></div>
+  <div class="detail-drawer" id="detail-drawer">
+    <div class="drawer-header">
+      <h3>Campaign Details</h3>
+      <button class="drawer-close" id="drawer-close" aria-label="Close drawer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-field">
+        <div class="drawer-field-label">Campaign Name</div>
+        <div class="drawer-field-value" id="drawer-name">—</div>
+      </div>
+      <div class="drawer-field">
+        <div class="drawer-field-label">Status</div>
+        <div class="drawer-field-value" id="drawer-status">—</div>
+      </div>
+      <div class="drawer-field">
+        <div class="drawer-field-label">Created At</div>
+        <div class="drawer-field-value" id="drawer-date">—</div>
+      </div>
+      <div class="drawer-field">
+        <div class="drawer-field-label">Campaign ID</div>
+        <div class="drawer-field-value" id="drawer-id" style="color: var(--text-secondary); font-family: monospace;">—</div>
+      </div>
+    </div>
+    <div class="drawer-actions">
+      <button class="btn btn-primary btn-sm" id="drawer-edit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+        <span>Edit</span>
+      </button>
+      <button class="btn btn-danger btn-sm" id="drawer-delete">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+        <span>Delete</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ─── Modal: Create Campaign ────────────── -->
   <div id="modal-create" class="modal-backdrop">
     <div class="modal-card">
       <div class="modal-header">
         <h2 class="modal-title">Create Campaign</h2>
-        <button class="modal-close" data-close="modal-create">&times;</button>
+        <button class="modal-close" data-close="modal-create" aria-label="Close">&times;</button>
       </div>
       <form id="form-create">
         <div class="modal-body">
@@ -226,6 +420,7 @@
               required
               maxlength="150"
             >
+            <span class="form-error" id="create-name-error"></span>
           </div>
           <div class="form-group">
             <label for="create-status" class="form-label">Initial Status</label>
@@ -238,18 +433,21 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-close="modal-create">Cancel</button>
-          <button type="submit" id="btn-submit-create" class="btn btn-primary">Create Campaign</button>
+          <button type="submit" id="btn-submit-create" class="btn btn-primary">
+            <span class="btn-text">Create Campaign</span>
+            <svg class="btn-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none;width:16px;height:16px;animation:spin 0.7s linear infinite"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle><path d="M12 2a10 10 0 0 1 10 10" stroke-opacity="1"></path></svg>
+          </button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Modal: Edit Campaign -->
+  <!-- ─── Modal: Edit Campaign ──────────────── -->
   <div id="modal-edit" class="modal-backdrop">
     <div class="modal-card">
       <div class="modal-header">
         <h2 class="modal-title">Edit Campaign</h2>
-        <button class="modal-close" data-close="modal-edit">&times;</button>
+        <button class="modal-close" data-close="modal-edit" aria-label="Close">&times;</button>
       </div>
       <form id="form-edit">
         <input type="hidden" id="edit-id">
@@ -263,6 +461,7 @@
               required
               maxlength="150"
             >
+            <span class="form-error" id="edit-name-error"></span>
           </div>
           <div class="form-group">
             <label for="edit-status" class="form-label">Campaign Status</label>
@@ -275,39 +474,53 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-close="modal-edit">Cancel</button>
-          <button type="submit" id="btn-submit-edit" class="btn btn-primary">Save Changes</button>
+          <button type="submit" id="btn-submit-edit" class="btn btn-primary">
+            <span class="btn-text">Save Changes</span>
+            <svg class="btn-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none;width:16px;height:16px;animation:spin 0.7s linear infinite"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle><path d="M12 2a10 10 0 0 1 10 10" stroke-opacity="1"></path></svg>
+          </button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Modal: Delete Confirmation -->
+  <!-- ─── Modal: Delete Confirmation ────────── -->
   <div id="modal-delete" class="modal-backdrop">
     <div class="modal-card">
       <div class="modal-header">
         <h2 class="modal-title" style="color: var(--danger);">Delete Campaign</h2>
-        <button class="modal-close" data-close="modal-delete">&times;</button>
+        <button class="modal-close" data-close="modal-delete" aria-label="Close">&times;</button>
       </div>
       <div class="modal-body">
-        <p style="font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          Are you sure you want to delete <strong id="delete-campaign-name"></strong>?
-        </p>
-        <p style="font-size: 0.825rem; color: var(--text-muted); margin-top: 0.5rem;">
-          This action is permanent and cannot be undone.
-        </p>
+        <div class="delete-warning">
+          <div class="delete-warning-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </div>
+          <div>
+            <div class="delete-warning-text">
+              Are you sure you want to delete <strong id="delete-campaign-name"></strong>?
+            </div>
+            <div class="delete-warning-sub">This action is permanent and cannot be undone.</div>
+          </div>
+        </div>
         <input type="hidden" id="delete-id">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-close="modal-delete">Cancel</button>
-        <button type="button" id="btn-confirm-delete" class="btn btn-danger">Yes, Delete Campaign</button>
+        <button type="button" id="btn-confirm-delete" class="btn btn-danger">
+          <span class="btn-text">Yes, Delete Campaign</span>
+          <svg class="btn-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none;width:16px;height:16px;animation:spin 0.7s linear infinite"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle><path d="M12 2a10 10 0 0 1 10 10" stroke-opacity="1"></path></svg>
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- Toast Notification Container -->
+  <!-- Toast Container -->
   <div id="toast-container" class="toast-container"></div>
 
   <script src="/js/dashboard.js"></script>
 </body>
 </html>
-

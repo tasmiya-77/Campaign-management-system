@@ -10,6 +10,11 @@ const campaignRoutes = require('./routes/campaignRoutes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Trust reverse proxy when behind cloud load balancers (Render, Cloudflare, etc.)
+if (process.env.NODE_ENV === 'production' || process.env.TRUST_PROXY === 'true') {
+  app.set('trust proxy', 1);
+}
+
 // Middleware: Body and Cookie parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

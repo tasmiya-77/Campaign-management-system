@@ -8,6 +8,7 @@
     "dev": "node --watch server.js",
     "test": "node scripts/verify-auth.js && node scripts/verify-campaigns.js && node scripts/verify-frontend.js",
     "test:db": "node scripts/test-db.js",
+    "db:init": "node scripts/init-db.js",
     "test:auth": "node scripts/verify-auth.js",
     "test:campaigns": "node scripts/verify-campaigns.js",
     "test:frontend": "node scripts/verify-frontend.js",
@@ -18,6 +19,9 @@
     "express",
     "mysql"
   ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {

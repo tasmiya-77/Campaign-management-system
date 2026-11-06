@@ -3,6 +3,8 @@ node_modules/
 
 # Environment variables (contains sensitive secrets & DB credentials)
 .env
+.env.*
+!.env.example
 
 # Logs
 *.log

@@ -214,15 +214,120 @@ npm run test:db            # MySQL connection test
 1. **Environment Variables:**
    - Set `NODE_ENV=production`.
    - Set a strong, randomly generated `JWT_SECRET`.
-   - Configure production MySQL credentials (`DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`).
-2. **Reverse Proxy (Nginx / Cloudflare):**
-   - Point proxy to port `3000`.
-   - Ensure SSL/TLS is terminated at the proxy; cookies with `secure: true` will be strictly enforced in production.
-3. **Process Manager:**
-   - Use `pm2` or systemd to keep the service running:
-     ```bash
-     npm install -g pm2
-     pm2 start server.js --name "campaign-management"
-     pm2 save
-     pm2 startup
+   - Configure production database credentials (`DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, `DB_SSL=true`).
+2. **Reverse Proxy (Render / Nginx / Cloudflare):**
+   - In production, `trust proxy` is enabled to support HTTPS cookie transmission and accurate client IP rate limiting.
+   - Ensure SSL/TLS is enabled; cookies with `secure: true` will be automatically enforced in production.
+
+---
+
+## Free Cloud Deployment Guide: Render + TiDB Cloud
+
+This system is fully configured for 100% free cloud deployment using:
+- **TiDB Cloud Serverless:** Free MySQL 8.0-compatible distributed cloud database (5 GiB free storage, automated backups, TLS 1.2+ encryption).
+- **Render Web Service:** Free cloud hosting for Node.js apps with automatic HTTPS, continuous deployment from Git, and health monitoring.
+
+---
+
+### Step 1: Create Free TiDB Cloud Database
+1. Go to [TiDB Cloud](https://tidbcloud.com) and create a free account (no credit card required).
+2. In the TiDB Cloud Console, click **Create Cluster** and choose **Serverless (Free)**.
+3. Select your preferred region (e.g., `AWS / us-east-1` or `AWS / eu-central-1`).
+4. Click **Create**. Your cluster will be provisioned in ~30 seconds.
+5. In the cluster dashboard, click **Connect**:
+   - Choose connection method: **General** or **Standard Connection**.
+   - Note down:
+     - **Host:** e.g. `gateway01.us-east-1.prod.aws.tidbcloud.com`
+     - **Port:** `4000`
+     - **User:** e.g. `xxxxxx.root`
+     - **Password:** (Set or generate your cluster password)
+     - **Database:** `campaign_management` (or `test`)
+
+---
+
+### Step 2: Initialize Database Schema in TiDB Cloud
+Choose either of the two methods below:
+
+#### Method A: Via TiDB Cloud Web SQL Editor (Simplest)
+1. In the TiDB Cloud console, navigate to **SQL Editor** on the left menu.
+2. Ensure your target database is selected (or run `CREATE DATABASE IF NOT EXISTS campaign_management; USE campaign_management;`).
+3. Copy the contents of `database/schema-production.sql` and click **Run**.
+4. Confirm that `users` and `campaigns` tables are created.
+
+#### Method B: Via CLI Migration Script
+Run the automated initialization script from your machine with TiDB connection details:
+```bash
+DB_HOST="gateway01.us-east-1.prod.aws.tidbcloud.com" \
+DB_PORT=4000 \
+DB_USER="xxxxxx.root" \
+DB_PASSWORD="your_password" \
+DB_NAME="campaign_management" \
+DB_SSL=true \
+npm run db:init
+```
+
+---
+
+### Step 3: Deploy to Render
+
+#### Option A: Using Render Blueprint (`render.yaml`)
+1. Push your repository to GitHub.
+2. In the [Render Dashboard](https://dashboard.render.com), click **New** -> **Blueprint**.
+3. Connect your repository. Render detects `render.yaml` automatically.
+4. Render will prompt you for:
+   - `DB_HOST`: Your TiDB Cloud Host
+   - `DB_USER`: Your TiDB Cloud User
+   - `DB_PASSWORD`: Your TiDB Cloud Password
+   - `DB_NAME`: Your TiDB database name (`campaign_management`)
+5. Click **Apply**. Render will automatically generate a secure `JWT_SECRET` and deploy the service.
+
+#### Option B: Manual Web Service Setup
+1. In Render Dashboard, click **New** -> **Web Service**.
+2. Connect your GitHub repository.
+3. Configure the service settings:
+   - **Name:** `campaign-management`
+   - **Region:** Same region as TiDB Cloud for lowest latency
+   - **Branch:** `main`
+   - **Runtime:** `Node`
+   - **Build Command:** `npm install`
+   - **Start Command:** `npm start`
+   - **Instance Type:** `Free`
+4. Expand **Advanced** -> **Health Check Path** and set it to: `/api/health`.
+5. Under **Environment Variables**, add the following:
+
+| Key | Recommended Value | Notes |
+|---|---|---|
+| `NODE_ENV` | `production` | Enables secure cookies and production error handling |
+| `DB_HOST` | *Your TiDB Host* | e.g. `gateway01.us-east-1.prod.aws.tidbcloud.com` |
+| `DB_PORT` | `4000` | Default TiDB Serverless port |
+| `DB_USER` | *Your TiDB User* | e.g. `xxxxxx.root` |
+| `DB_PASSWORD` | *Your TiDB Password* | TiDB cluster password |
+| `DB_NAME` | `campaign_management` | Database name |
+| `DB_SSL` | `true` | Enforces TLS 1.2+ encryption for TiDB Cloud |
+| `JWT_SECRET` | *Random 64+ char string* | Secret key for JWT signing |
+| `TRUST_PROXY` | `true` | Enables correct client IP tracking behind Render proxy |
+
+6. Click **Create Web Service**.
+
+---
+
+### Step 4: Verify Deployment
+Once the deployment displays **Live**:
+1. Open `https://your-service-name.onrender.com/api/health` in your browser.
+   - Expected status: `HTTP 200`
+   - Response:
+     ```json
+     {
+       "status": "ok",
+       "services": {
+         "server": "running",
+         "database": "connected"
+       },
+       "databaseDetails": {
+         "active": true
+       }
+     }
      ```
+2. Navigate to `https://your-service-name.onrender.com` to access the login page and test registration and campaign management.
+
+
